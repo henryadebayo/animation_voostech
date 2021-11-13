@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-
 class RegisterPage extends StatefulWidget {
   const RegisterPage({Key key}) : super(key: key);
 
@@ -13,7 +12,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-
+        children: [Text("Hello You've come to the end of the animation")],
       ),
     );
   }
