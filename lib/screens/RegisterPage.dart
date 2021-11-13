@@ -12,7 +12,15 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
-        children: [Text("Hello You've come to the end of the animation")],
+        children: [
+          Text(
+            "Hello You've come to the end of the animation",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 24,
+            ),
+          )
+        ],
       ),
     );
   }
