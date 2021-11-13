@@ -1,44 +1,72 @@
 import 'package:flutter/material.dart';
 
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key key, this.title}) : super(key: key);
+import 'RegisterPage.dart';
 
-  final String title;
-
+class FunAnimation extends StatefulWidget {
   @override
-  State<MyHomePage> createState() => _MyHomePageState();
+  _FunAnimationState createState() => _FunAnimationState();
 }
 
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
+class _FunAnimationState extends State<FunAnimation>
+    with TickerProviderStateMixin {
+  Animation animation;
+  AnimationController animationController;
 
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
+  @override
+  void initState() {
+    super.initState();
+
+    animationController =
+        AnimationController(vsync: this, duration: Duration(seconds: 3));
+    animation = Tween(begin: -1.0, end: 0.0).animate(CurvedAnimation(
+        curve: Curves.fastOutSlowIn, parent: animationController))
+      ..addStatusListener((status) {
+        if (status == AnimationStatus.completed) {
+          animationController.reset();
+          animation = Tween(begin: 0.0, end: 1.0).animate(CurvedAnimation(
+              parent: animationController, curve: Curves.fastOutSlowIn))
+            ..addStatusListener((status) {
+              if (status == AnimationStatus.completed) {
+                Navigator.of(context).push(MaterialPageRoute(
+                    builder: (BuildContext context) => RegisterPage()));
+              }
+            });
+          animationController.forward();
+        }
+      });
+
+    animationController.forward();
   }
 
   @override
   Widget build(BuildContext context) {
+    final double deviceWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(""),
-          ],
+        child: AnimatedBuilder(
+          animation: animation,
+          builder: (BuildContext context, Widget child) {
+            return Transform(
+              transform: Matrix4.translationValues(
+                  animation.value * deviceWidth, 0.0, 0.0),
+              child: Container(
+                height: 200.0,
+                width: 200.0,
+                //child:  Text("Foodie"),
+
+                decoration: BoxDecoration(
+                  //color: Colors.blue,
+                  image: DecorationImage(
+                    image: AssetImage("images/stealogo.png"),
+                    // fit: BoxFit.cover,
+                  ),
+                  // borderRadius: BorderRadius.circular(50.0),
+                ),
+              ),
+            );
+          },
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
